@@ -1,0 +1,74 @@
+// developer:   Daan de Dios
+// date:        2019-03-05
+// function:    FTP Installation, Config
+
+
+FTP
+---------------------------------------------------------------------------------------------------------
+
+1. Update
+------------------------
+sudo apt update
+------------------------
+
+
+2. Installieren
+------------------------------------
+sudo apt-get install proftpd-basic 
+------------------------------------
+
+
+3. uncomment "defaultRoot"
+------------------------------------
+mkdir -p /home/FTP
+nano /etc/proftpd/proftpd.conf
+
+> DeaultRoot /home/FTP/
+------------------------------------
+
+
+4. neu start
+-----------------------------------
+systemctl restart proftpd
+
+
+
+5. Anonymus zugriff
+--------------------------------------------------------
+nano /etc/proftpd/proftpd.conf
+
++Add
+******************************
+<Anonymous /home/ftp>
+    User nobody
+    Group nogroup
+    UserAlias anonymous ftp
+    DirFakeUser on ftp
+    DirFakeGroup on ftp
+    RequireValidShell off
+    MaxClients 10
+    DisplayLogin welcome.msg
+    DisplayChdir .message
+        <Directory *>
+          <Limit WRITE>
+            DenyAll
+        </Limit>
+    </Directory>
+</Anonymous>
+******************************
+
+6. Virtual Users
+-------------------------------------------------------------------------
+https://www.secretisland.de/proftp-mit-virtual-user-und-verzeichnissen/
+-------------------------------------------------------------------------
+
+
+7. Virtual Host
+--------------------
+nano /etc/proftpd/virtuals.conf
+
+>> uncomment the VirtualHost part.
+
+- restart --> sudo systemctl restart proftpd
+--------------------
+---------------------------------------------------------------------------------------------------------
